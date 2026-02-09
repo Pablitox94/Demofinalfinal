@@ -1,0 +1,27 @@
+{
+  "short_name": "EstadísticaMente",
+  "name": "EstadísticaMente - CRM Educativo",
+  "description": "Plataforma educativa de estadística para todos los niveles",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "theme_color": "#FFB86C",
+  "background_color": "#FFF5EB",
+  "orientation": "any",
+  "scope": "/",
+  "categories": ["education", "productivity"],
+  "lang": "es-AR"
+}

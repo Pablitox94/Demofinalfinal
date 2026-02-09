@@ -1,0 +1,143 @@
+{
+  "brand_identity": {
+    "name": "EstadísticaMente",
+    "tagline": "Educational Analytical CRM",
+    "tone": {
+      "primary": "Playful & Visual",
+      "secondary": "Structured & Analytical",
+      "university": "Professional & Data-Driven"
+    },
+    "core_values": ["Fusion over Imitation", "Emotion First", "Content is King"]
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Outfit, sans-serif",
+      "body": "DM Sans, sans-serif",
+      "mono": "JetBrains Mono, monospace",
+      "accent": "Fredoka, sans-serif"
+    },
+    "weights": {
+      "light": 300,
+      "regular": 400,
+      "medium": 500,
+      "bold": 700,
+      "black": 900
+    },
+    "usage": {
+      "h1": "text-4xl md:text-6xl font-bold tracking-tight font-heading text-pink-950",
+      "h2": "text-3xl md:text-4xl font-bold tracking-tight font-heading text-pink-900",
+      "h3": "text-2xl font-semibold font-heading text-pink-800",
+      "body": "text-base leading-relaxed text-slate-600 font-body",
+      "label": "text-xs font-bold uppercase tracking-widest text-pink-500 font-mono"
+    }
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "DEFAULT": "#DB2777",
+        "foreground": "#FFFFFF",
+        "50": "#FDF2F8",
+        "100": "#FCE7F3",
+        "200": "#FBCFE8",
+        "300": "#F9A8D4",
+        "400": "#F472B6",
+        "500": "#EC4899",
+        "600": "#DB2777",
+        "700": "#BE185D",
+        "800": "#9D174D",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "secondary": {
+        "DEFAULT": "#4F46E5",
+        "foreground": "#FFFFFF"
+      },
+      "accent": {
+        "DEFAULT": "#F59E0B",
+        "foreground": "#FFFFFF"
+      },
+      "background": "#FFF1F2",
+      "surface": "#FFFFFF",
+      "text": {
+        "primary": "#831843",
+        "secondary": "#64748B",
+        "muted": "#94A3B8"
+      }
+    },
+    "gradients": {
+      "primary": "bg-gradient-to-r from-pink-500 to-rose-600",
+      "sidebar": "bg-gradient-to-b from-pink-600 to-rose-700",
+      "card_hover": "hover:bg-gradient-to-br hover:from-white hover:to-pink-50"
+    }
+  },
+  "layout": {
+    "spacing": {
+      "container_padding": "p-6 md:p-12",
+      "section_gap": "gap-8 md:gap-16",
+      "element_gap": "gap-4"
+    },
+    "grids": {
+      "dashboard": "grid grid-cols-1 md:grid-cols-12 gap-6",
+      "cards": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+    },
+    "border_radius": {
+      "default": "rounded-2xl",
+      "card": "rounded-3xl",
+      "button": "rounded-full"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-pink-600 hover:bg-pink-700 text-white rounded-full px-8 py-3 font-bold shadow-lg hover:shadow-pink-500/30 transition-all duration-300 transform hover:-translate-y-1",
+      "secondary": "bg-white text-pink-600 border-2 border-pink-100 hover:border-pink-200 hover:bg-pink-50 rounded-full px-8 py-3 font-bold transition-all duration-300",
+      "ghost": "text-pink-600 hover:bg-pink-50 rounded-full px-6 py-2 font-medium transition-colors"
+    },
+    "cards": {
+      "base": "bg-white rounded-3xl border border-pink-100 shadow-sm hover:shadow-xl hover:shadow-pink-500/10 transition-all duration-300 p-6",
+      "highlight": "bg-gradient-to-br from-pink-500 to-rose-600 text-white rounded-3xl shadow-lg shadow-pink-500/25 p-6"
+    },
+    "sidebar": {
+      "container": "bg-pink-600 text-white h-screen w-64 fixed left-0 top-0 p-6 flex flex-col shadow-2xl z-50",
+      "link": "flex items-center gap-3 px-4 py-3 rounded-xl text-pink-100 hover:bg-white/10 hover:text-white transition-all duration-200 font-medium",
+      "link_active": "bg-white text-pink-600 font-bold shadow-lg"
+    },
+    "inputs": {
+      "base": "bg-white border-2 border-pink-100 focus:border-pink-500 focus:ring-4 focus:ring-pink-500/20 rounded-xl px-4 py-3 outline-none transition-all duration-200 text-slate-700 placeholder:text-slate-400"
+    }
+  },
+  "visual_enhancers": {
+    "shadows": {
+      "soft": "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+      "glow": "shadow-[0_0_50px_-12px_rgb(236,72,153,0.5)]"
+    },
+    "glassmorphism": {
+      "light": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm",
+      "dark": "bg-black/60 backdrop-blur-xl border border-white/10 shadow-sm"
+    },
+    "textures": "bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"
+  },
+  "assets": {
+    "images": {
+      "mascot_profe_marce": "https://images.unsplash.com/photo-1538491247542-5da27794bc65?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "students_primary": "https://images.pexels.com/photos/8982661/pexels-photo-8982661.jpeg",
+      "students_secondary": "https://images.pexels.com/photos/6209799/pexels-photo-6209799.jpeg",
+      "students_university": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "background_abstract": "https://images.unsplash.com/photo-1766898765672-c8d0c4acbfd3?crop=entropy&cs=srgb&fm=jpg&q=85"
+    },
+    "icons": "Lucide React (default), Phosphor Icons (for specific needs)"
+  },
+  "universal_guidelines": [
+    "DO NOT use generic 'Inter' font for headings. Use 'Outfit' or 'Fredoka'.",
+    "DO NOT use pure black (#000000). Use Dark Pink (#831843) or Slate (#1E293B).",
+    "ALWAYS use rounded-2xl or rounded-3xl for containers to maintain the friendly aesthetic.",
+    "Ensure high contrast for accessibility, especially with pink backgrounds.",
+    "Use 'Profe Marce' (the mascot) for help tips and empty states.",
+    "Primary Level: Use large icons, less text, more colors.",
+    "Secondary Level: Balanced text and visuals, standard charts.",
+    "University Level: Dense data, professional layout, advanced charts.",
+    "All text must be in Spanish (Argentina).",
+    "Use 'sonner' for toast notifications.",
+    "Use 'recharts' for data visualization with the custom palette."
+  ],
+  "instructions_to_main_agent": "You are building 'EstadísticaMente'. Start by setting up the global CSS variables in index.css to match the pink palette. Then, create the layout wrapper with the pink sidebar. Build the Home screen with the 3 level selection buttons. Ensure the 'Profe Marce' chatbot is accessible from the sidebar. Use the provided image URLs for the respective sections."
+}

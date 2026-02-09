@@ -1,0 +1,154 @@
+<analysis>**original_problem_statement**:
+The user wants to build a full-featured educational analytical CRM web application called EstadísticaMente. The application is intended for primary, secondary, and higher education levels to teach statistical thinking and data analysis.
+
+**PRODUCT REQUIREMENTS:**
+- **Technology Stack**: React (Frontend) and FastAPI (Backend) with a Firestore database.
+- **Language**: The entire user-facing application must be in Spanish (Argentina).
+- **Core Modules**:
+    - **Primary Level**: Visual and intuitive interface. (Completed)
+    - **Secondary Level**: More advanced, with univariate/multivariate analysis, various chart types, and standard statistical calculations. (Completed)
+    - **Higher Education Level**: Professional-grade interface with advanced statistics (inference, hypothesis testing, regression), complex data models, and interactive simulations. (In Progress)
+- **AI Chatbot Profe Marce**: An educational AI assistant that adapts its explanations to the user's selected educational level.
+- **AI Reports**: Automatic generation of statistical reports tailored to the educational level.
+- **Data Input**: Support for manual entry, voice input, and file uploads (Excel, CSV).
+- **User Roles**: Student, Teacher, Institution Administrator (Authentication to be implemented last).
+
+**User's preferred language**: Spanish. The next agent MUST respond in Spanish.
+
+**what currently exists?**
+A full-stack application with a FastAPI backend and a React frontend. The application now has three distinct modules:
+1.  **Primary Level**: Fully functional and previously verified by the user (though some final features are pending explicit testing).
+2.  **Secondary Level**: Fully implemented and tested by the testing subagent. It includes dedicated pages for projects, data loading, a PowerBI-style chart dashboard, advanced analysis, and AI features tailored for high school students.
+3.  **Higher Education Level**: The file structure and basic routes have been created (scaffolding is complete), and the backend AI prompts have been updated. The core logic for the advanced statistical features is not yet implemented.
+
+**Last working item**:
+The agent was in the middle of implementing the Nivel Superior (Higher Education Level) as requested by the user.
+
+- **Last item agent was working**: Implementing the Nivel Superior module. The agent finished creating all the placeholder component files, added the routes to , and was updating the backend prompts in  to cater to university-level students.
+- **Status**: IN PROGRESS
+- **Agent Testing Done**: N
+- **Which testing method agent to use?**: both. Once the feature is complete, both frontend and backend testing agents should be used to ensure the advanced statistical functions and UI work correctly.
+- **User Testing Done**: N
+
+**All Pending/In progress Issue list**:
+- **Issue 1**: **User Verification for New Primary Level Features (P1)**
+    - **Description**: Before starting the secondary level, the agent implemented PDF Export, new interactive games, and real voice data input for the primary level. The user has not yet tested or confirmed if they meet expectations. This has been carried over.
+    - **Status**: USER VERIFICATION PENDING
+    - **Next step**: The user should be prompted to test these features, perhaps after a major module like the Superior Level is completed to avoid interrupting the current workflow.
+
+**In progress Task List**:
+- **Task 1: Complete the implementation of the Nivel Superior module (P0)**
+    - **Description**: The user has requested to build the higher education module by extending the secondary level's features and adding more advanced capabilities.
+    - **Where to resume**: The scaffolding is complete. The next agent should resume by implementing the core logic within the newly created frontend pages and building the necessary backend endpoints to support them. Key areas to implement are:
+        - : Add logic for inference, probability distributions, hypothesis testing, regression models, and correlation.
+        - : Create interactive activities and simulations for university-level concepts.
+        - : Create new endpoints to perform the advanced statistical calculations required for the AnalisisSuperior page.
+        - : Implement more complex example projects.
+    - **What will be achieved with this?**: A fully functional higher education module as per the user's specifications.
+    - **Status**: IN PROGRESS
+    - **Should Test frontend/backend/both after fix?**: both
+    - **Blocked on something**: No.
+
+**Upcoming and Future Tasks**
+- **Upcoming Tasks**:
+    - **Implement User Authentication (P2)**: Implement a full login/registration system. The user has consistently stated this should be the final step of the project.
+    - **Implement Teacher/Admin Dashboard (P2)**: An enhancement suggested by the previous agent to allow teachers to manage students and projects.
+
+**Completed work in this session**
+- **Secondary Level Module (DONE & TESTED)**:
+    - Successfully implemented the complete feature set for the Nivel Secundario.
+    - Created dedicated UI/UX including sidebar () and pages (, , , etc.).
+    - Implemented a PowerBI-style chart dashboard with cross-filtering ().
+    - Added advanced analysis features (frequency tables, measures of dispersion, order, etc.) in .
+    - Tailored AI prompts in  for Profe Marce and AI Reports to a high school audience.
+    - Added routes in  and a  endpoint in .
+    - **Testing**: Passed 100% of frontend and backend tests conducted by the . The report is available at .
+- **Higher Education Level Module (SCAFFOLDING)**:
+    - Created all placeholder files for pages and components (, , , etc.).
+    - Updated  and  to include routes and navigation for the new module.
+    - Updated AI prompts in the backend for the superior level.
+
+**Earlier issues found/mentioned but not fixed**
+- The user verification for the primary level's final features (PDF export, games, voice input) remains pending. See All Pending/In progress Issue list.
+
+**Known issue recurrence from previous fork**
+- N/A
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+- **Frontend**: React, React Router, Recharts, TailwindCSS
+- **Backend**: FastAPI (Python)
+- **Database**: Google Firestore
+- **AI**: DeepSeek API (via )
+- **PDF Generation**: jsPDF, html2canvas
+- **Voice Input**: Web Speech API
+
+**key DB schema**
+No changes were made to the DB schema in this session. The next agent should consider if new models or schema changes in Firestore are needed to support the advanced statistical features of the Superior level (e.g., storing hypothesis test results, regression models).
+- : { uid=0(root) gid=0(root) groups=0(root): str, : str, : str, : str, : str, : datetime }
+- : { uid=0(root) gid=0(root) groups=0(root): str, : str, : list, : list, : list }
+
+**changes in tech stack**
+- None.
+
+**All files of reference**
+- **New Files (Superior Level)**: , , and all other files prefixed with .
+- **New Files (Secondary Level)**: All files in  and  with  in their name.
+- **Modified Files**: , , , .
+- **Test Report**: .
+
+**Areas that need refactoring**:
+- **Routing**:  is now managing routes for three distinct application levels. This reinforces the need to create nested router layouts for each educational level to simplify logic and improve maintainability.
+- **State Management**: With three levels and complex data flowing between pages, passing state via props () is becoming unwieldy. A global state management solution (React Context or another library) is highly recommended.
+- **Component Duplication**: The application now has , , and . These should be refactored into a single, configurable  component that accepts props to determine its links and appearance.
+
+**key api endpoints**
+- : Create a new project.
+- : List all projects.
+- : Delete a project.
+- : Update a project's data. **(New)**
+- : Send a message to the Profe Marce chatbot.
+- : Generate an AI report.
+- **Note**: New endpoints will be required for the advanced statistical analyses of the Superior Level (e.g., , ).
+
+**Critical Info for New Agent**
+- **Immediate Priority**: The highest priority is to complete the implementation of the Nivel Superior (Higher Education Level).
+- **User Workflow**: The user provides large, detailed feature requests for an entire module at a time. The agent should build the full module and then present it for feedback.
+- **Authentication**: All login/authentication logic is to be implemented last. Continue using the mock auth context.
+- **Language and Tone**: All user-facing text MUST be in Spanish (Argentina). The tone of the AI (chatbot and reports) must be carefully adapted for each educational level (Primary, Secondary, Superior) as per user instructions.
+
+**documents and test reports created in this job**
+- 
+-  (Updated with Secondary Level completion)
+
+**Last 10 User Messages and any pending HUMAN messages**
+1.  **User**: Provides a comprehensive list of requirements for the **Secondary Level module**. (COMPLETED)
+2.  **Agent**: Acknowledged, explored code, and implemented the entire Secondary Level module across frontend and backend.
+3.  **Agent**: Ran the testing agent to validate the new Secondary Level.
+4.  **Agent**: Confirmed all tests passed and finished the task, suggesting a teacher dashboard for the future.
+5.  **User**: Confirmed the work was perfect (perfecto...) and immediately provided a comprehensive list of requirements for the **Higher Education Level module**. (IN PROGRESS)
+6.  **Agent**: Acknowledged and began scaffolding the files for the Higher Education Level.
+
+**Project Health Check:**
+- **Broken**: None currently known.
+- **Mocked**: User authentication is mocked via .
+
+**3rd Party Integrations**
+- **Firebase**: Firestore for the database.
+- **DeepSeek API**: For all AI features (Chatbot, Reports).
+- **jsPDF & html2canvas**: For PDF export.
+- **Web Speech API**: For voice data input.
+
+**Testing status**
+- **Testing agent used after significant changes**: YES. It was used successfully to test the entire Secondary Level module.
+- **Troubleshoot agent used after agent stuck in loop**: NO.
+- **Test files created**:  was generated by the testing agent.
+- **Known regressions**: None.
+
+**Credentials to test flow:**
+N/A. Authentication is mocked.
+
+**What agent forgot to execute**
+- The agent did not prompt the user to verify the final primary-level features (PDF export, games, voice input) that were implemented right before the user requested the secondary level. This task remains pending.</analysis>

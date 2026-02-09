@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fredoka:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 330 81% 27%;
+        --card: 0 0% 100%;
+        --card-foreground: 330 81% 27%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 330 81% 27%;
+        --primary: 330 81% 43%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 243 75% 59%;
+        --secondary-foreground: 0 0% 100%;
+        --accent: 38 92% 50%;
+        --accent-foreground: 0 0% 100%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215 16.3% 46.9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 330 30% 90%;
+        --input: 330 30% 90%;
+        --ring: 330 81% 43%;
+        --radius: 1rem;
+        --pink-50: 327 73% 97%;
+        --pink-100: 326 78% 95%;
+        --pink-200: 326 85% 90%;
+        --pink-300: 327 87% 82%;
+        --pink-400: 329 86% 70%;
+        --pink-500: 330 81% 60%;
+        --pink-600: 330 81% 43%;
+        --pink-700: 333 71% 41%;
+        --pink-800: 333 61% 33%;
+        --pink-900: 330 81% 27%;
+        --pink-950: 330 89% 15%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-pink-50 text-foreground;
+        font-family: 'DM Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+    }
+    code {
+        font-family: 'JetBrains Mono', monospace;
+    }
+}
+
+@layer utilities {
+    .font-heading {
+        font-family: 'Outfit', sans-serif;
+    }
+    .font-body {
+        font-family: 'DM Sans', sans-serif;
+    }
+    .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .font-accent {
+        font-family: 'Fredoka', sans-serif;
+    }
+    
+    /* Colores pastel naranjas para nivel primario */
+    .gradient-orange-pastel {
+        background: linear-gradient(135deg, #FFD4A3 0%, #FFB86C 100%);
+    }
+    
+    .gradient-sidebar-orange {
+        background: linear-gradient(180deg, #FFB86C 0%, #FFA347 100%);
+    }
+    
+    .gradient-pink {
+        background: linear-gradient(135deg, #EC4899 0%, #F43F5E 100%);
+    }
+    
+    .gradient-sidebar {
+        background: linear-gradient(180deg, #DB2777 0%, #BE185D 100%);
+    }
+    
+    .card-hover {
+        @apply hover:shadow-xl hover:shadow-pink-500/10 transition-all duration-300;
+    }
+    
+    .btn-primary {
+        @apply bg-pink-600 hover:bg-pink-700 text-white rounded-full px-8 py-3 font-bold shadow-lg hover:shadow-pink-500/30 transition-all duration-300 transform hover:-translate-y-1;
+    }
+    
+    .btn-secondary {
+        @apply bg-white text-pink-600 border-2 border-pink-100 hover:border-pink-200 hover:bg-pink-50 rounded-full px-8 py-3 font-bold transition-all duration-300;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+    }
+}
