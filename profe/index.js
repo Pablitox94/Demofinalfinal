@@ -38,11 +38,19 @@ exports.profeMarceChat = functions
         reply: response.data.choices[0].message.content
       });
 
-    } catch (error) {
-      console.error("DeepSeek error:", error.response?.data || error.message);
+   } catch (error) {
 
-      res.status(500).json({
-        error: "Error consultando DeepSeek"
-      });
-    }
+  let errorInfo = error.message;
+
+  if (error.response && error.response.data) {
+    errorInfo = error.response.data;
+  }
+
+  console.error("DeepSeek error:", errorInfo);
+
+  res.status(500).json({
+    error: "Error consultando DeepSeek"
+  });
+}
+
   });
