@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import { trackQuestionAsked } from '../utils/achievementTracker';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = BACKEND_URL;
 
 const ProfeMarce = () => {
   const [educationLevel, setEducationLevel] = useState('secundario');
@@ -58,15 +58,16 @@ const ProfeMarce = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API}/chat`, {
-        message: inputMessage,
-        sessionId: sessionId,
-        educationLevel: educationLevel
+      const response = await axios.post(`${API}/profeMarceChat`, {
+        userInput: inputMessage,
+        sessionId,
+        educationLevel
       });
+
 
       const assistantMessage = {
         role: 'assistant',
-        content: response.data.response,
+        content:  response.data.reply,
         timestamp: new Date()
       };
 

@@ -33,7 +33,7 @@ setGlobalOptions({ maxInstances: 10 });
 const functions = require("firebase-functions");
 const axios = require("axios");
 
-exports.profeMarceChat = functions.https.onRequest(async (req, res) => {
+/*exports.profeMarceChat = functions.https.onRequest(async (req, res) => {
   try {
     const { userInput } = req.body;
     if (!userInput) return res.status(400).json({ error: "userInput requerido" });
@@ -49,4 +49,4 @@ exports.profeMarceChat = functions.https.onRequest(async (req, res) => {
   } catch (e) {
     return res.status(500).json({ error: "Error en IA" });
   }
-});
+});*/

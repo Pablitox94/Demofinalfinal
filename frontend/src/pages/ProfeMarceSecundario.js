@@ -12,7 +12,8 @@ import { Textarea } from '../components/ui/textarea';
 import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = BACKEND_URL;
+
 
 const ProfeMarceSecundario = () => {
   const [messages, setMessages] = useState([]);
@@ -61,16 +62,17 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API}/chat`, {
-        message: inputMessage,
-        sessionId: sessionId,
-        educationLevel: 'secundario'
+      const response = await axios.post(`${API}/profeMarceChat`, {
+        userInput: inputMessage,
+        sessionId,
+        educationLevel: "secundario"
       });
 
-      if (response.data.response) {
+
+      if (response.data.reply) {
         setMessages(prev => [...prev, {
           role: 'assistant',
-          content: response.data.response
+          content: response.data.reply
         }]);
       }
     } catch (error) {

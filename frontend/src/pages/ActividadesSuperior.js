@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Gamepad2, Play, RefreshCw, CheckCircle, XCircle, TrendingUp,
-  Target, Dice6, Calculator, BarChart3, Percent
+  Target, Dice6, Calculator, BarChart3, Percent, Construction 
 } from 'lucide-react';
 import SidebarSuperior from '../components/SidebarSuperior';
 import Navbar from '../components/Navbar';
@@ -11,6 +11,44 @@ import { Label } from '../components/ui/label';
 import { toast } from 'sonner';
 
 const ActividadesSuperior = () => {
+
+  // ==========================================
+  // VISTA ACTUAL: EN DESARROLLO
+  // ==========================================
+  // Mostramos solo el cartel. El código de las actividades está comentado más abajo para preservarlo.
+
+  return (
+    <div className="flex min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+      <SidebarSuperior />
+      
+      <div className="flex-1 lg:ml-64 w-full">
+        <Navbar projectName="Actividades Interactivas" educationLevel="superior" />
+        
+        <div className="p-8 flex items-center justify-center min-h-[calc(100vh-100px)]">
+           
+           {/* CARTEL EN DESARROLLO */}
+           <div className="bg-emerald-100 border-l-8 border-emerald-500 rounded-2xl p-12 shadow-xl flex flex-col items-center justify-center text-center max-w-2xl animate-pulse">
+             <div className="bg-emerald-500 p-6 rounded-full text-white mb-6 shadow-lg">
+               <Construction className="w-20 h-20" />
+             </div>
+             <h3 className="text-5xl font-heading font-black text-emerald-800 mb-6">En desarrollo 🚀</h3>
+             <p className="text-emerald-700 font-medium text-2xl leading-relaxed">
+               Estamos preparando nuevas simulaciones y ejercicios interactivos avanzados. <br/>
+               <span className="font-bold text-emerald-900">¡Pronto estarán disponibles!</span>
+             </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+
+  /*
+  // ==========================================
+  // CÓDIGO ORIGINAL (GUARDADO / COMENTADO)
+  // ==========================================
+  // Descomentar este bloque para restaurar la funcionalidad completa de las actividades.
+
   const [activeActivity, setActiveActivity] = useState(null);
   const [score, setScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -608,6 +646,7 @@ const ActividadesSuperior = () => {
       </div>
     </div>
   );
+  */
 };
 
 export default ActividadesSuperior;

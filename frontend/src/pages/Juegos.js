@@ -1,30 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import { Gamepad2, Star, Trophy, Play, RotateCcw, CheckCircle } from 'lucide-react';
+import { Gamepad2, Star, Trophy, Play, RotateCcw, CheckCircle, Construction } from 'lucide-react'; 
 import SidebarPrimary from '../components/SidebarPrimary';
 import Navbar from '../components/Navbar';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
 
 const Juegos = () => {
-  const memoryCardTypes = ['📊', '📈', '📉', '🥧', '📋', '🎯'];
-  const [currentGame, setCurrentGame] = useState(null);
-  const [score, setScore] = useState(0);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  
-  // Memory Game State
-  const [memoryCards, setMemoryCards] = useState([]);
-  const [flipped, setFlipped] = useState([]);
-  const [matched, setMatched] = useState([]);
-  
-  // Sort Game State
-  const [numbersList, setNumbersList] = useState([]);
-  const [sortedNumbers, setSortedNumbers] = useState([]);
-  const [draggedIndex, setDraggedIndex] = useState(null);
-  
-  // Guess Chart Game State
-  const [guessData, setGuessData] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
+  // ==========================================
+  // VISTA ACTUAL: EN DESARROLLO
+  // ==========================================
+  // Mostramos solo el cartel. El código del juego está comentado más abajo para preservarlo.
+  
+  return (
+    <div className="flex min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
+      <SidebarPrimary />
+      
+      <div className="flex-1 lg:ml-64 w-full">
+        <Navbar projectName="Juegos Educativos" educationLevel="primario" />
+        
+        <div className="p-8 flex items-center justify-center min-h-[calc(100vh-100px)]">
+          
+          {/* CARTEL EN DESARROLLO */}
+          <div className="bg-yellow-100 border-l-8 border-yellow-500 rounded-2xl p-12 shadow-xl flex flex-col items-center justify-center text-center max-w-2xl animate-pulse">
+             <div className="bg-yellow-500 p-6 rounded-full text-white mb-6 shadow-lg">
+               <Construction className="w-20 h-20" />
+             </div>
+             <h3 className="text-5xl font-heading font-black text-yellow-800 mb-6">En desarrollo 🚀</h3>
+             <p className="text-yellow-700 font-medium text-2xl leading-relaxed">
+               Estamos trabajando para traerte los mejores juegos de estadística. <br/>
+               <span className="font-bold text-yellow-900">¡Muy pronto podrás divertirte y aprender!</span>
+             </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+
+  /*
+  // ==========================================
+  // CÓDIGO ORIGINAL (GUARDADO / COMENTADO)
+  // ==========================================
+  // Descomentar este bloque para restaurar la funcionalidad completa de los juegos.
+
+  // ==========================================
+  // ESTADOS Y CONFIGURACIÓN
+  // ==========================================
+  
+  // Iconos disponibles para el juego de memoria
+  const memoryCardTypes = ['📊', '📈', '📉', '🥧', '📋', '🎯'];
+  
+  // Estados generales de la aplicación de juegos
+  const [currentGame, setCurrentGame] = useState(null); // ID del juego actual (null si estamos en el menú)
+  const [score, setScore] = useState(0); // Puntaje acumulado en la sesión actual
+  const [questionIndex, setQuestionIndex] = useState(0); // Para saber en qué pregunta del quiz estamos
+  
+  // Estados específicos: Juego de Memoria
+  const [memoryCards, setMemoryCards] = useState([]); // Array de cartas
+  const [flipped, setFlipped] = useState([]); // Índices de cartas dadas vuelta temporalmente
+  const [matched, setMatched] = useState([]); // Tipos de cartas ya emparejadas permanentemente
+  
+  // Estados específicos: Juego de Ordenar (Drag & Drop)
+  const [numbersList, setNumbersList] = useState([]); // Lista de números a ordenar
+  const [sortedNumbers, setSortedNumbers] = useState([]); // (Reservado para lógica futura o validación)
+  const [draggedIndex, setDraggedIndex] = useState(null); // Índice del elemento que se está arrastrando
+  
+  // Estados específicos: Juego de Adivinar Gráfico
+  const [guessData, setGuessData] = useState(null); // Datos del desafío actual
+  const [selectedAnswer, setSelectedAnswer] = useState(null); // Respuesta seleccionada por el usuario
+
+  // ==========================================
+  // DATOS ESTÁTICOS (CONFIGURACIÓN DE JUEGOS)
+  // ==========================================
+
+  // Lista principal de juegos disponibles
   const games = [
     {
       id: 'quiz_estadistica',
@@ -60,6 +110,7 @@ const Juegos = () => {
     }
   ];
 
+  // Preguntas para el Quiz de Estadística
   const quizQuestions = [
     {
       question: '¿Qué es la media?',
@@ -78,11 +129,17 @@ const Juegos = () => {
     }
   ];
 
+  // ==========================================
+  // LÓGICA GENERAL
+  // ==========================================
+
+  // Función para iniciar un juego específico
   const startGame = (gameId) => {
     setCurrentGame(gameId);
     setScore(0);
     setQuestionIndex(0);
     
+    // Inicializar estados según el juego seleccionado
     if (gameId === 'memory_graficos') {
       initMemoryGame();
     } else if (gameId === 'ordena_datos') {
@@ -94,8 +151,11 @@ const Juegos = () => {
     toast.success('¡Juego iniciado! 🎮');
   };
 
-  // QUIZ GAME
+  // ==========================================
+  // LÓGICA: QUIZ
+  // ==========================================
   const answerQuestion = (optionIndex) => {
+    // Verificar si la opción es correcta
     if (optionIndex === quizQuestions[questionIndex].correct) {
       setScore(score + 10);
       toast.success('¡Correcto! +10 puntos 🎉');
@@ -103,38 +163,46 @@ const Juegos = () => {
       toast.error('¡Ups! Intenta de nuevo 😅');
     }
 
+    // Avanzar a la siguiente pregunta o finalizar
     if (questionIndex < quizQuestions.length - 1) {
       setTimeout(() => setQuestionIndex(questionIndex + 1), 1000);
     } else {
       setTimeout(() => {
         toast.success(`¡Juego terminado! Puntaje: ${score + (optionIndex === quizQuestions[questionIndex].correct ? 10 : 0)} 🏆`);
-        setCurrentGame(null);
+        setCurrentGame(null); // Volver al menú
       }, 1000);
     }
   };
 
-  // MEMORY GAME
+  // ==========================================
+  // LÓGICA: JUEGO DE MEMORIA
+  // ==========================================
   const initMemoryGame = () => {
-  const cards = [...memoryCardTypes, ...memoryCardTypes].sort(() => Math.random() - 0.5);
+    // Duplicar cartas para formar pares y mezclarlas aleatoriamente
+    const cards = [...memoryCardTypes, ...memoryCardTypes].sort(() => Math.random() - 0.5);
     setMemoryCards(cards.map((type, idx) => ({ id: idx, type, flipped: false })));
     setFlipped([]);
     setMatched([]);
   };
 
   const flipCard = (index) => {
+    // Prevenir interacción si ya hay 2 cartas volteadas o la carta ya está lista
     if (flipped.length === 2 || flipped.includes(index) || matched.includes(memoryCards[index].type)) return;
 
     const newFlipped = [...flipped, index];
     setFlipped(newFlipped);
 
+    // Si hay dos cartas volteadas, verificar coincidencia
     if (newFlipped.length === 2) {
       const [first, second] = newFlipped;
       if (memoryCards[first].type === memoryCards[second].type) {
+        // ¡Coincidencia!
         setMatched([...matched, memoryCards[first].type]);
         setScore(score + 10);
         toast.success('¡Par encontrado! +10 puntos 🎉');
         setFlipped([]);
         
+        // Verificar si ganó el juego
         if (matched.length + 1 === memoryCardTypes.length) {
           setTimeout(() => {
             toast.success('¡Juego completado! 🏆');
@@ -142,15 +210,19 @@ const Juegos = () => {
           }, 1000);
         }
       } else {
+        // No coinciden: voltear de nuevo tras un breve retraso
         setTimeout(() => setFlipped([]), 1000);
       }
     }
   };
 
-  // SORT GAME
+  // ==========================================
+  // LÓGICA: JUEGO DE ORDENAR (DRAG & DROP)
+  // ==========================================
   const initSortGame = () => {
+    // Generar 8 números aleatorios entre 1 y 50
     const numbers = Array.from({ length: 8 }, () => Math.floor(Math.random() * 50) + 1);
-    setNumbersList(numbers.sort(() => Math.random() - 0.5));
+    setNumbersList(numbers.sort(() => Math.random() - 0.5)); // Mezclar
     setSortedNumbers([]);
   };
 
@@ -160,13 +232,14 @@ const Juegos = () => {
   };
 
   const handleDragOver = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Necesario para permitir el evento drop
   };
 
   const handleDrop = (e, dropIndex) => {
     e.preventDefault();
     if (draggedIndex === null) return;
 
+    // Reordenar la lista
     const newList = [...numbersList];
     const draggedItem = newList[draggedIndex];
     newList.splice(draggedIndex, 1);
@@ -177,6 +250,7 @@ const Juegos = () => {
   };
 
   const checkSortOrder = () => {
+    // Verificar si la lista está ordenada ascendentemente
     const isCorrect = numbersList.every((num, idx) => idx === 0 || num >= numbersList[idx - 1]);
     if (isCorrect) {
       setScore(score + 20);
@@ -187,7 +261,9 @@ const Juegos = () => {
     }
   };
 
-  // GUESS CHART GAME
+  // ==========================================
+  // LÓGICA: ADIVINA EL GRÁFICO
+  // ==========================================
   const initGuessGame = () => {
     const datasets = [
       {
@@ -202,6 +278,7 @@ const Juegos = () => {
       }
     ];
     
+    // Seleccionar un desafío aleatorio
     setGuessData(datasets[Math.floor(Math.random() * datasets.length)]);
     setSelectedAnswer(null);
   };
@@ -217,7 +294,11 @@ const Juegos = () => {
     }
   };
 
+  // ==========================================
+  // RENDERIZADO DE JUEGOS (ORIGINAL)
+  // ==========================================
   const renderCurrentGame = () => {
+    // ----------------- RENDER: QUIZ -----------------
     if (currentGame === 'quiz_estadistica') {
       return (
         <div className="max-w-4xl mx-auto">
@@ -253,6 +334,7 @@ const Juegos = () => {
       );
     }
 
+    // ----------------- RENDER: MEMORIA -----------------
     if (currentGame === 'memory_graficos') {
       return (
         <div className="max-w-4xl mx-auto">
@@ -287,6 +369,7 @@ const Juegos = () => {
       );
     }
 
+    // ----------------- RENDER: ORDENAR DATOS -----------------
     if (currentGame === 'ordena_datos') {
       return (
         <div className="max-w-4xl mx-auto">
@@ -323,6 +406,7 @@ const Juegos = () => {
       );
     }
 
+    // ----------------- RENDER: ADIVINA GRÁFICO -----------------
     if (currentGame === 'adivina_grafico' && guessData) {
       return (
         <div className="max-w-4xl mx-auto">
@@ -331,6 +415,7 @@ const Juegos = () => {
               {guessData.question}
             </h2>
 
+            // Muestra de datos
             <div className="bg-pink-50 rounded-2xl p-6 mb-8 border-2 border-pink-200">
               <h3 className="text-xl font-bold mb-4 text-center">Datos:</h3>
               <div className="grid grid-cols-3 gap-4">
@@ -343,6 +428,7 @@ const Juegos = () => {
               </div>
             </div>
 
+            // Botones de selección de gráfico
             <div className="grid grid-cols-3 gap-4">
               {['barras', 'lineas', 'circular'].map((type) => (
                 <button
@@ -369,7 +455,8 @@ const Juegos = () => {
       );
     }
   };
-
+  
+  // (Este return original está comentado y sustituido por el cartel de arriba)
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
       <SidebarPrimary />
@@ -378,7 +465,8 @@ const Juegos = () => {
         <Navbar projectName="Juegos Educativos" educationLevel="primario" />
         
         <div className="p-8">
-          {/* Header */}
+          
+          // Header del módulo
           <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-3xl p-8 mb-8 text-white shadow-2xl">
             <div className="flex items-center justify-between">
               <div>
@@ -396,7 +484,7 @@ const Juegos = () => {
 
           {!currentGame ? (
             <>
-              {/* Games Grid */}
+              // Grilla de selección de juegos
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {games.map((game) => (
                   <div
@@ -428,6 +516,7 @@ const Juegos = () => {
             </>
           ) : (
             <div>
+              // Vista del juego activo
               <div className="mb-4 flex justify-between items-center">
                 <Button
                   onClick={() => setCurrentGame(null)}
@@ -445,6 +534,7 @@ const Juegos = () => {
       </div>
     </div>
   );
+  */
 };
 
 export default Juegos;

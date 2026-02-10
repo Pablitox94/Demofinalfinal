@@ -12,7 +12,8 @@ import { Textarea } from '../components/ui/textarea';
 import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = BACKEND_URL;
+
 
 const ProfeMarceSuperior = () => {
   const [messages, setMessages] = useState([]);
@@ -55,13 +56,14 @@ Utilizaré notación matemática formal ($\\LaTeX$) cuando sea necesario para ma
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API}/chat`, {
-        message: inputMessage,
-        sessionId: sessionId,
-        educationLevel: 'superior'
-      });
-      if (response.data.response) {
-        setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
+  const response = await axios.post(`${API}/profeMarceChat`, {
+    userInput: inputMessage,
+    sessionId,
+    educationLevel: "superior"
+  });
+
+      if (response.data.reply) {
+        setMessages(prev => [...prev, { role: 'assistant', content: response.data.reply }]);
       }
     } catch (error) {
       console.error('Error:', error);

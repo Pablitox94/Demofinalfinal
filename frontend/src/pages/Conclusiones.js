@@ -14,7 +14,8 @@ import { toast } from 'sonner';
 import localStorageService from '../services/localStorageService';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = BACKEND_URL;
+
 
 const Conclusiones = () => {
   const [projects, setProjects] = useState([]);

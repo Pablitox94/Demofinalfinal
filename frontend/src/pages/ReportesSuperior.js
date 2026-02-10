@@ -21,7 +21,8 @@ import { toast } from 'sonner';
 import localStorageService from '../services/localStorageService';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = BACKEND_URL;
+
 
 const ReportesSuperior = () => {
   const [projects, setProjects] = useState([]);
@@ -102,9 +103,10 @@ const ReportesSuperior = () => {
     }
 
     setLoading(true);
-    try {
-      const response = await axios.post(`${API}/reports/generate`, null, {
-        params: { project_id: selectedProject, education_level: 'superior' }
+try {
+      const response =await axios.post(`${API}/generateReport`, {
+  projectId: selectedProject,
+  educationLevel: 'superior' 
       });
       if (response.data.report) {
         setReport(response.data.report);

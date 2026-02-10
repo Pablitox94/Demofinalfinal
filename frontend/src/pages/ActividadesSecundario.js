@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Gamepad2, Play, RefreshCw, CheckCircle, XCircle, TrendingUp,
-  Target, Dice6, Calculator, BarChart3, Percent
+  Target, Dice6, Calculator, BarChart3, Percent, Construction 
 } from 'lucide-react';
 import SidebarSecundario from '../components/SidebarSecundario';
 import Navbar from '../components/Navbar';
@@ -11,6 +11,44 @@ import { Label } from '../components/ui/label';
 import { toast } from 'sonner';
 
 const ActividadesSecundario = () => {
+
+  // ==========================================
+  // VISTA ACTUAL: EN DESARROLLO
+  // ==========================================
+  // Mostramos solo el cartel. El código de las actividades está comentado más abajo para preservarlo.
+
+  return (
+    <div className="flex min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-50">
+      <SidebarSecundario />
+      
+      <div className="flex-1 lg:ml-64 w-full">
+        <Navbar projectName="Actividades Interactivas" educationLevel="secundario" />
+        
+        <div className="p-8 flex items-center justify-center min-h-[calc(100vh-100px)]">
+           
+           {/* CARTEL EN DESARROLLO */}
+           <div className="bg-purple-100 border-l-8 border-purple-500 rounded-2xl p-12 shadow-xl flex flex-col items-center justify-center text-center max-w-2xl animate-pulse">
+             <div className="bg-purple-500 p-6 rounded-full text-white mb-6 shadow-lg">
+               <Construction className="w-20 h-20" />
+             </div>
+             <h3 className="text-5xl font-heading font-black text-purple-800 mb-6">En desarrollo 🚀</h3>
+             <p className="text-purple-700 font-medium text-2xl leading-relaxed">
+               Estamos preparando nuevas simulaciones y ejercicios interactivos para el nivel secundario. <br/>
+               <span className="font-bold text-purple-900">¡Pronto estarán disponibles!</span>
+             </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+
+  /*
+  // ==========================================
+  // CÓDIGO ORIGINAL (GUARDADO / COMENTADO)
+  // ==========================================
+  // Descomentar este bloque para restaurar la funcionalidad completa de las actividades.
+
   const [activeActivity, setActiveActivity] = useState(null);
   const [score, setScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -35,14 +73,14 @@ const ActividadesSecundario = () => {
       title: 'Pruebas de Hipótesis',
       description: 'Practicá la interpretación de pruebas de hipótesis',
       icon: Target,
-      color: 'from-blue-500 to-indigo-500'
+      color: 'from-blue-500 to-cyan-500'
     },
     {
       id: 'regression_game',
       title: 'Estimación de Regresión',
       description: 'Estimá la línea de regresión a partir de un gráfico de dispersión',
       icon: TrendingUp,
-      color: 'from-orange-500 to-amber-500'
+      color: 'from-orange-500 to-red-500'
     },
     {
       id: 'correlation_game',
@@ -512,7 +550,7 @@ const ActividadesSecundario = () => {
                     />
                   </div>
                   <div>
-                    <Label>Límite secundario</Label>
+                    <Label>Límite superior</Label>
                     <Input
                       type="number"
                       step="0.01"
@@ -548,14 +586,14 @@ const ActividadesSecundario = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50">
+    <div className="flex min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-50">
       <SidebarSecundario />
       
       <div className="flex-1 lg:ml-64 w-full">
         <Navbar projectName="Actividades Interactivas" educationLevel="secundario" />
         
         <div className="p-6">
-          <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 rounded-3xl p-6 mb-6 text-white shadow-xl">
+          <div className="bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 rounded-3xl p-6 mb-6 text-white shadow-xl">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-heading font-bold mb-2 flex items-center gap-3">
@@ -584,10 +622,10 @@ const ActividadesSecundario = () => {
                     className="bg-white rounded-2xl p-6 border border-purple-100 hover:shadow-xl transition-all cursor-pointer group"
                   >
                     <div className={`w-14 h-14 rounded-2xl bg-gradient-to-r ${activity.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                      <Icon className="w-7 h-7 text-white" />
+                      <Icon className=\"w-7 h-7 text-white\" />
                     </div>
-                    <h3 className="text-xl font-bold text-purple-900 mb-2">{activity.title}</h3>
-                    <p className="text-gray-600 text-sm">{activity.description}</p>
+                    <h3 className=\"text-xl font-bold text-purple-900 mb-2\">{activity.title}</h3>
+                    <p className=\"text-gray-600 text-sm\">{activity.description}</p>
                   </div>
                 );
               })}
@@ -596,8 +634,8 @@ const ActividadesSecundario = () => {
             <>
               <Button
                 onClick={() => setActiveActivity(null)}
-                variant="outline"
-                className="mb-6 border-purple-300 text-purple-700"
+                variant=\"outline\"
+                className=\"mb-6 border-purple-300 text-purple-700\"
               >
                 ← Volver a actividades
               </Button>
@@ -608,6 +646,7 @@ const ActividadesSecundario = () => {
       </div>
     </div>
   );
+  */
 };
 
 export default ActividadesSecundario;
