@@ -94,7 +94,7 @@ const ProfeMarcePrimaria = () => {
       <div className="flex-1 lg:ml-64 w-full">
         <Navbar projectName="Profe Marce" educationLevel="primario" />
         
-        <div className="p-4 sm:p-6 h-[calc(100vh-64px)] flex flex-col">
+        <div className="p-4 sm:p-6 h-[calc(100vh-64px)] flex flex-col min-h-0">
           {/* Header */}
           <div className="bg-gradient-to-r from-orange-300 via-amber-300 to-yellow-300 rounded-2xl sm:rounded-3xl p-4 sm:p-6 mb-4 sm:mb-6 text-white shadow-xl">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -121,7 +121,7 @@ const ProfeMarcePrimaria = () => {
           </div>
 
           {/* Suggested Questions */}
-          <div className="mb-3 sm:mb-4">
+          <div className="mb-3 sm:mb-4 shrink-0">
             <p className="text-xs sm:text-sm font-bold text-gray-600 mb-2">💡 Preguntas sugeridas:</p>
             <div className="flex flex-wrap gap-2">
               {suggestedQuestions.map((q, idx) => (
@@ -138,8 +138,8 @@ const ProfeMarcePrimaria = () => {
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-orange-200 overflow-hidden flex flex-col">
-            <div className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4">
+          <div className="flex-1 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-orange-200 overflow-hidden flex flex-col min-h-0">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4 min-h-0">
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
@@ -200,7 +200,7 @@ const ProfeMarcePrimaria = () => {
             </div>
 
             {/* Input */}
-            <div className="p-3 sm:p-4 border-t-2 sm:border-t-4 border-orange-100 bg-orange-50">
+            <div className="p-3 sm:p-4 border-t-2 sm:border-t-4 border-orange-100 bg-orange-50 shrink-0">
               <div className="flex gap-2 sm:gap-3">
                 <Input
                   value={inputMessage}

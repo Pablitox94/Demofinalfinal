@@ -48,6 +48,10 @@ self.addEventListener('fetch', (event) => {
   if (!event.request.url.startsWith('http')) {
     return;
   }
+  // No cachear ni interceptar requests no-GET (por ejemplo POST)
+  if (event.request.method !== 'GET') {
+    return;
+  }
 
   // Para API calls, siempre intentar la red primero
   if (event.request.url.includes('/api/')) {

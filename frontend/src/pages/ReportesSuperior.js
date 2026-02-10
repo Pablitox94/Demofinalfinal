@@ -103,10 +103,17 @@ const ReportesSuperior = () => {
     }
 
     setLoading(true);
-try {
-      const response =await axios.post(`${API}/generateReport`, {
-  projectId: selectedProject,
-  educationLevel: 'superior' 
+    try {
+      const [project, datasetsData, stats] = await Promise.all([
+        localStorageService.getProjectById(selectedProject),
+        localStorageService.getDatasets(selectedProject),
+        localStorageService.getStatistics(selectedProject)
+      ]);
+
+      const response = await axios.post(`${API}/generateReport`, {
+        projectId: selectedProject,
+        educationLevel: 'superior',
+        data: { project, datasets: datasetsData, stats }
       });
       if (response.data.report) {
         setReport(response.data.report);

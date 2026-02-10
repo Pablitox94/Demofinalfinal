@@ -116,7 +116,7 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
       <div className="flex-1 lg:ml-64 flex flex-col h-screen">
         <Navbar projectName="Profe Marce" educationLevel="secundario" />
         
-        <div className="flex-1 flex flex-col p-6 overflow-hidden">
+        <div className="flex-1 flex flex-col p-6 overflow-hidden min-h-0">
           {/* Header */}
           <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 rounded-2xl p-4 mb-4 text-white shadow-xl flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -142,12 +142,12 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden flex flex-col">
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden flex flex-col min-h-0">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
-                  className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+                  className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                     msg.role === 'user' 
@@ -165,7 +165,7 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
                     )}
                   </div>
                   
-                                   <div className={`max-w-[75%] rounded-2xl px-4 py-3 break-words overflow-wrap-anywhere ${
+                                   <div className={`max-w-[75%] rounded-2xl px-4 py-3 break-words overflow-wrap-anywhere self-start ${
                     msg.role === 'user'
                       ? 'bg-purple-600 text-white'
                       : 'bg-purple-50 text-gray-800'
@@ -199,7 +199,7 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
               ))}
               
               {loading && (
-                <div className="flex gap-3">
+                <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
                     <img 
                       src="/profemarce.png" 
@@ -221,7 +221,7 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
 
             {/* Suggested Questions */}
             {messages.length <= 2 && (
-              <div className="px-4 py-3 border-t border-purple-100 bg-purple-50/50">
+              <div className="px-4 py-3 border-t border-purple-100 bg-purple-50/50 shrink-0">
                 <p className="text-xs text-gray-500 mb-2">Preguntas sugeridas:</p>
                 <div className="flex flex-wrap gap-2">
                   {suggestedQuestions.map((q, idx) => (
@@ -240,7 +240,7 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
             )}
 
             {/* Input Area */}
-            <div className="p-4 border-t border-purple-100 bg-white">
+            <div className="p-4 border-t border-purple-100 bg-white shrink-0">
               <div className="flex gap-3">
                 <Textarea
                   value={inputMessage}

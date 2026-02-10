@@ -72,9 +72,17 @@ const Conclusiones = () => {
     setLoading(true);
     try {
       // Primero intentamos con el backend (IA)
-      const response = await axios.post(
-        `${API}/reports/generate?project_id=${selectedProject}&education_level=primario`
-      );
+      const [project, datasets, stats] = await Promise.all([
+        localStorageService.getProjectById(selectedProject),
+        localStorageService.getDatasets(selectedProject),
+        localStorageService.getStatistics(selectedProject)
+      ]);
+
+      const response = await axios.post(`${API}/generateReport`, {
+        projectId: selectedProject,
+        educationLevel: 'primario',
+        data: { project, datasets, stats }
+      });
       setReport(response.data.report);
       
       // Guardar el reporte localmente

@@ -6,6 +6,12 @@ const { defineSecret } = require('firebase-functions/params');
 // Definimos el secreto
 const DEEPSEEK_API_KEY = defineSecret('DEEPSEEK_API_KEY');
 
+function applyCors(res) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+}
+
 function getSystemMessage(educationLevel) {
   let base = "Sos 'Profe Marce', una asistente educativa especializada en estadística. ";
   base += "Hablás en español argentino de forma clara, amable y respetuosa. ";
@@ -55,8 +61,7 @@ exports.profeMarceChat = functions
   .runWith({ secrets: [DEEPSEEK_API_KEY] })
   .https.onRequest(async (req, res) => {
     // (opcional pero recomendado) permitir preflight/CORS si llamás desde el navegador
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    applyCors(res);
     if (req.method === 'OPTIONS') return res.status(204).send('');
 
     try {
@@ -102,12 +107,11 @@ exports.profeMarceChat = functions
   });
 
   exports.generateReport = functions
-  .runWith({ secrets: [DEEPSEEK_API_KEY] })
+  .runWith({ secrets: [DEEPSEEK_API_KEY], timeoutSeconds: 120, memory: '1GB' })
   .https.onRequest(async (req, res) => {
 
     // CORS básico
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    applyCors(res);
     if (req.method === 'OPTIONS') return res.status(204).send('');
 
     try {
