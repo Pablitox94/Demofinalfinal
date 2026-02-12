@@ -9,32 +9,24 @@ const urlsToCache = [
   '/manifest.json'
 ];
 
-// Instalar Service Worker
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Cache abierto');
-        // Intentar cachear los recursos principales
-        return cache.addAll(urlsToCache.filter(url => !url.includes('.css') && !url.includes('.js')))
-          .catch(err => {
-            console.log('Algunos recursos no se pudieron cachear, pero continuamos:', err);
-          });
+        return cache.addAll(urlsToCache.filter((url) => !url.includes('.css') && !url.includes('.js')))
+          .catch(() => undefined);
       })
   );
   self.skipWaiting();
 });
 
-// Activar Service Worker
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Eliminando cache antiguo:', cacheName);
-            return caches.delete(cacheName);
-          }
+          if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
+          return undefined;
         })
       );
     })
@@ -42,65 +34,58 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Estrategia: Network First, fallback a Cache
 self.addEventListener('fetch', (event) => {
-  // Ignorar requests de chrome extensions y otros
-  if (!event.request.url.startsWith('http')) {
-    return;
-  }
-  // No cachear ni interceptar requests no-GET (por ejemplo POST)
-  if (event.request.method !== 'GET') {
-    return;
-  }
+  const requestUrl = new URL(event.request.url);
 
-  // Para API calls, siempre intentar la red primero
-  if (event.request.url.includes('/api/')) {
+  if (!event.request.url.startsWith('http')) return;
+  if (event.request.method !== 'GET') return;
+
+  // Never intercept third-party resources (UserWay/PostHog/CDNs).
+  if (requestUrl.origin !== self.location.origin) return;
+
+  if (requestUrl.pathname.startsWith('/api/')) {
     event.respondWith(
-      fetch(event.request)
-        .catch(() => {
-          // Si falla la red, devolver respuesta offline
-          return new Response(
-            JSON.stringify({ 
-              error: 'Sin conexión', 
-              offline: true,
-              message: 'Esta función requiere conexión a internet' 
-            }),
-            {
-              status: 503,
-              headers: { 'Content-Type': 'application/json' }
-            }
-          );
-        })
+      fetch(event.request).catch(() => {
+        return new Response(
+          JSON.stringify({
+            error: 'Sin conexion',
+            offline: true,
+            message: 'Esta funcion requiere conexion a internet'
+          }),
+          {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      })
     );
     return;
   }
 
-  // Para otros recursos, intentar red primero, luego cache
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Si la respuesta es válida, clonarla y guardarla en cache
         if (response && response.status === 200) {
           const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
         }
         return response;
       })
       .catch(() => {
-        // Si falla la red, buscar en cache
-        return caches.match(event.request)
-          .then((response) => {
-            if (response) {
-              return response;
-            }
-            // Si no está en cache y es una navegación, mostrar página offline
-            if (event.request.mode === 'navigate') {
-              return caches.match('/index.html');
-            }
-          });
+        return caches.match(event.request).then((response) => {
+          if (response) return response;
+
+          if (event.request.mode === 'navigate') {
+            return caches.match('/index.html').then((indexResponse) => {
+              if (indexResponse) return indexResponse;
+              return new Response('Offline', { status: 503, statusText: 'Offline' });
+            });
+          }
+
+          return new Response('Offline', { status: 503, statusText: 'Offline' });
+        });
       })
   );
 });

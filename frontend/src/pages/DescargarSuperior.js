@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Download, FileText, Database, Loader2, Check } from 'lucide-react';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, LineChart, Line } from 'recharts';
 import SidebarSuperior from '../components/SidebarSuperior';
 import Navbar from '../components/Navbar';
 import { Button } from '../components/ui/button';
@@ -20,8 +18,6 @@ import localStorageService from '../services/localStorageService';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
-const COLORS = ['#14B8A6', '#0D9488', '#0F766E', '#115E59', '#134E4A', '#10B981', '#059669', '#047857'];
-
 // Función para limpiar texto para PDF
 const cleanTextForPDF = (text) => {
   if (!text) return '';
@@ -58,12 +54,7 @@ const DescargarSuperior = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(false);
   const [exportProgress, setExportProgress] = useState('');
-  const [chartData, setChartData] = useState([]);
   const [calculatedStats, setCalculatedStats] = useState(null);
-  const [selectedChartType, setSelectedChartType] = useState('bar');
-  const chartRef = useRef(null);
-
-  const getChartPreferenceKey = (projectId) => `chartPreference_superior_${projectId}`;
 
   useEffect(() => {
     loadProjects();
@@ -88,7 +79,6 @@ const DescargarSuperior = () => {
 
   const loadAllProjectData = async (projectId) => {
     try {
-      setSelectedChartType(localStorage.getItem(getChartPreferenceKey(projectId)) || 'bar');
       const [projectRes, datasetsRes, reportsRes] = await Promise.all([
         axios.get(`${API}/projects/${projectId}`),
         axios.get(`${API}/datasets/${projectId}`),
@@ -98,28 +88,11 @@ const DescargarSuperior = () => {
       setDatasets(datasetsRes.data);
       setReports(reportsRes.data);
 
-      // Preparar datos para gráfico y estadísticos
+      // Preparar datos para estadisticos
       if (datasetsRes.data.length > 0 && datasetsRes.data[0].variables) {
         const variable = datasetsRes.data[0].variables[0];
         if (variable && variable.values) {
-          // Crear tabla de frecuencias
-          const valueCounts = {};
-          variable.values.forEach(val => {
-            valueCounts[val] = (valueCounts[val] || 0) + 1;
-          });
-          
-          const processed = Object.entries(valueCounts).map(([name, value]) => ({
-            name: String(name),
-            cantidad: value
-          }));
-          let cumulative = 0;
-          processed.forEach(item => {
-            cumulative += item.cantidad;
-            item.acumulada = cumulative;
-          });
-          setChartData(processed);
-
-          // Calcular estadísticos avanzados
+          // Calcular estadisticos avanzados
           const numericValues = variable.values.map(v => parseFloat(v)).filter(v => !isNaN(v));
           if (numericValues.length > 0) {
             const n = numericValues.length;
@@ -224,39 +197,6 @@ const DescargarSuperior = () => {
           yPosition += splitValues.length * 4 + 6;
         });
       }
-
-      setExportProgress('Capturando grafico...');
-
-      // Capture chart
-      if (chartRef.current && chartData.length > 0) {
-        try {
-          const canvas = await html2canvas(chartRef.current, {
-            scale: 2,
-            backgroundColor: '#ffffff',
-            logging: false
-          });
-          
-          if (yPosition > pageHeight - 80) {
-            pdf.addPage();
-            yPosition = margin;
-          }
-
-          pdf.setFontSize(14);
-          pdf.setFont('helvetica', 'bold');
-          pdf.text('Grafico de Frecuencias', margin, yPosition);
-          yPosition += 8;
-
-          const imgData = canvas.toDataURL('image/png');
-          const imgWidth = pageWidth - 2 * margin;
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          
-          pdf.addImage(imgData, 'PNG', margin, yPosition, imgWidth, Math.min(imgHeight, 70));
-          yPosition += Math.min(imgHeight, 70) + 10;
-        } catch (chartError) {
-          console.error('Error capturando grafico:', chartError);
-        }
-      }
-
       setExportProgress('Agregando estadisticos...');
 
       // Statistics
@@ -438,45 +378,6 @@ const DescargarSuperior = () => {
                 </div>
               </div>
 
-              {chartData.length > 0 && (
-                <div className="sr-only" aria-hidden="true">
-                  <div ref={chartRef} className="bg-white p-4 rounded-xl" style={{ width: 900 }}>
-                    <ResponsiveContainer width="100%" height={260}>
-                      {selectedChartType === 'pie' ? (
-                        <PieChart>
-                          <Pie data={chartData} dataKey="cantidad" nameKey="name" cx="50%" cy="50%" outerRadius={110}>
-                            {chartData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                          </Pie>
-                          <Tooltip />
-                        </PieChart>
-                      ) : selectedChartType === 'line' || selectedChartType === 'polygon' || selectedChartType === 'cumulative' ? (
-                        <LineChart data={chartData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#D1FAE5" />
-                          <XAxis dataKey="name" tick={{ fill: '#065F46', fontSize: 11 }} />
-                          <YAxis tick={{ fill: '#065F46', fontSize: 11 }} />
-                          <Tooltip />
-                          <Line type="monotone" dataKey={selectedChartType === 'cumulative' ? 'acumulada' : 'cantidad'} stroke="#10B981" strokeWidth={3} />
-                        </LineChart>
-                      ) : (
-                        <BarChart data={chartData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#D1FAE5" />
-                          <XAxis dataKey="name" tick={{ fill: '#065F46', fontSize: 11 }} />
-                          <YAxis tick={{ fill: '#065F46', fontSize: 11 }} />
-                          <Tooltip />
-                          <Bar dataKey="cantidad" radius={[6, 6, 0, 0]}>
-                            {chartData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                          </Bar>
-                        </BarChart>
-                      )}
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              )}
-
               {/* Stats Preview */}
               {calculatedStats && (
                 <div className="bg-white rounded-2xl p-6 mb-6 border border-emerald-100 shadow-sm">
@@ -555,3 +456,7 @@ const DescargarSuperior = () => {
 };
 
 export default DescargarSuperior;
+
+
+
+

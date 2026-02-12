@@ -186,7 +186,7 @@ const GraficosPrimaria = () => {
                 <SelectTrigger className="text-lg h-14"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="bar">📊 Barras</SelectItem>
-                  <SelectItem value="pie">🥧 Torta</SelectItem>
+                  <SelectItem value="pie">🥧 Sectores</SelectItem>
                   <SelectItem value="pictogram">🎨 Pictograma</SelectItem>
                 </SelectContent>
               </Select>
@@ -236,7 +236,7 @@ const GraficosPrimaria = () => {
 
               {chartType === 'pie' && (
                 <div className="bg-white rounded-3xl p-8 shadow-lg border-4 border-purple-200">
-                  <h3 className="text-2xl font-heading font-bold text-purple-600 mb-6 text-center">🥧 Gráfico de Torta</h3>
+                  <h3 className="text-2xl font-heading font-bold text-purple-600 mb-6 text-center">🥧 Gráfico de Sectores</h3>
                   <ResponsiveContainer width="100%" height={400}>
                     <PieChart>
                       <Pie data={chartData} cx="50%" cy="50%" labelLine={true} label={({ name, porcentaje }) => `${name}: ${porcentaje}%`} outerRadius={150} fill="#8884d8" dataKey="value">

@@ -87,7 +87,7 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
@@ -245,7 +245,7 @@ Estoy acá para ayudarte a entender conceptos estadísticos, resolver dudas sobr
                 <Textarea
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   placeholder="Escribí tu pregunta sobre estadística..."
                   className="flex-1 resize-none min-h-[50px] max-h-[150px]"
                   disabled={loading}

@@ -100,7 +100,7 @@ const SidebarSecundario = () => {
         </nav>
 
         {/* Volver al Inicio */}
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 pb-24 border-t border-white/10">
           <button
             onClick={() => {
               handleLogout();

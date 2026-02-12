@@ -40,6 +40,7 @@ const GraficosSuperior = () => {
   const [selectedEmoji, setSelectedEmoji] = useState('📊');
   const [activeFilters, setActiveFilters] = useState({});
   const [regressionLine, setRegressionLine] = useState(null);
+  const [chartRenderTick, setChartRenderTick] = useState(0);
 
   const chartTypes = [
     { value: 'bar', label: 'Barras Verticales', icon: '📊' },
@@ -70,6 +71,29 @@ const GraficosSuperior = () => {
       loadDatasets(selectedProject);
     }
   }, [selectedProject]);
+
+  useEffect(() => {
+    const recalculateCharts = () => {
+      setChartRenderTick((prev) => prev + 1);
+      window.dispatchEvent(new Event('resize'));
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        recalculateCharts();
+      }
+    };
+
+    window.addEventListener('focus', recalculateCharts);
+    window.addEventListener('pageshow', recalculateCharts);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('focus', recalculateCharts);
+      window.removeEventListener('pageshow', recalculateCharts);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   const loadProjects = async () => {
     try {
@@ -660,7 +684,7 @@ const GraficosSuperior = () => {
               </div>
             ) : (
               dashboardCharts.map((chart) => (
-                <div key={chart.id} className="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
+                <div key={`${chart.id}-${chartRenderTick}`} className="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden min-w-0">
                   <div className="flex items-center justify-between px-4 py-3 bg-emerald-50 border-b border-emerald-100">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{chartTypes.find(c => c.value === chart.type)?.icon}</span>
@@ -670,7 +694,7 @@ const GraficosSuperior = () => {
                       <X className="w-4 h-4 text-red-500" />
                     </button>
                   </div>
-                  <div className="p-4">{renderChart(chart.type, chartData, chart.id)}</div>
+                  <div className="p-4 min-w-0 overflow-hidden">{renderChart(chart.type, chartData, chart.id)}</div>
                 </div>
               ))
             )}

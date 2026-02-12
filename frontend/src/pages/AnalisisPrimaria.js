@@ -286,12 +286,17 @@ const AnalisisPrimaria = () => {
           <div className="bg-white rounded-3xl p-8 mb-6 border-4 border-green-200">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">ðŸ§  Medidas de Tendencia Central</h2>
             
+                        <div className="text-center py-4 mb-2">
+              <Button onClick={calculateStatistics} className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full px-8 py-4 text-xl font-bold">
+                <Calculator className="w-6 h-6 mr-3" />
+                {statistics ? 'Recalcular medidas' : 'Calcular medidas de tendencia central'}
+              </Button>
+            </div>
+
             {!statistics ? (
-              <div className="text-center py-8">
-                <Button onClick={calculateStatistics} className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full px-8 py-4 text-xl font-bold">
-                  <Calculator className="w-6 h-6 mr-3" />Â¡Calcular Medidas!
-                </Button>
-              </div>
+              <p className="text-center text-gray-600 pb-6">
+                Presioná el botón para calcular media, mediana y moda.
+              </p>
             ) : (
               <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -344,3 +349,4 @@ const AnalisisPrimaria = () => {
 };
 
 export default AnalisisPrimaria;
+

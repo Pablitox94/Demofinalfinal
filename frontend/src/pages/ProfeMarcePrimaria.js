@@ -205,7 +205,7 @@ const ProfeMarcePrimaria = () => {
                 <Input
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && !loading && sendMessage()}
+                  onKeyDown={(e) => e.key === 'Enter' && !loading && sendMessage()}
                   placeholder="Escribí tu pregunta acá..."
                   className="flex-1 text-sm sm:text-base lg:text-lg rounded-full border-2 border-orange-300 focus:border-orange-400 py-4 sm:py-5 lg:py-6"
                   disabled={loading}

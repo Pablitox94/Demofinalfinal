@@ -92,7 +92,7 @@ const ProfeMarce = () => {
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
@@ -206,7 +206,7 @@ const ProfeMarce = () => {
                 placeholder="Escribí tu pregunta sobre estadística..."
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
                 disabled={loading}
                 className="flex-1 rounded-full border-2 border-pink-200 focus:border-pink-500 px-6 py-3"
               />

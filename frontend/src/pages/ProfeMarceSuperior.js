@@ -74,7 +74,7 @@ Utilizaré notación matemática formal ($\\LaTeX$) cuando sea necesario para ma
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
@@ -208,7 +208,7 @@ Utilizaré notación matemática formal ($\\LaTeX$) cuando sea necesario para ma
                 <Textarea
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   placeholder="Escribí tu consulta sobre estadística..."
                   className="flex-1 resize-none min-h-[50px] max-h-[150px]"
                   disabled={loading}

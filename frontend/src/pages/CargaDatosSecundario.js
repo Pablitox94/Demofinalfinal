@@ -58,6 +58,9 @@ const CargaDatosSecundario = () => {
   const [isListening, setIsListening] = useState(false);
   const [voiceTranscript, setVoiceTranscript] = useState('');
   const [recognition, setRecognition] = useState(null);
+  const [awaitingVariableType, setAwaitingVariableType] = useState(false);
+  const isListeningRef = useRef(false);
+  const lastTranscriptRef = useRef('');
 
   useEffect(() => {
     loadProjects();
@@ -108,27 +111,144 @@ const CargaDatosSecundario = () => {
       recognitionInstance.lang = 'es-AR';
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = false;
+      recognitionInstance.maxAlternatives = 5;
 
       recognitionInstance.onresult = (event) => {
         const lastResult = event.results[event.results.length - 1];
-        const transcript = lastResult[0].transcript.trim();
-        setVoiceTranscript(prev => prev ? `${prev}, ${transcript}` : transcript);
-        toast.success(`Escuchado: "${transcript}"`);
+        const transcript = lastResult[0].transcript.trim().toLowerCase();
+        handleVoiceTranscript(transcript);
       };
 
       recognitionInstance.onerror = (event) => {
         console.error('Error de reconocimiento:', event.error);
         setIsListening(false);
+        isListeningRef.current = false;
         toast.error('Error al escuchar. Intentá de nuevo.');
       };
 
       recognitionInstance.onend = () => {
-        if (isListening) {
-          recognitionInstance.start();
+        if (isListeningRef.current) {
+          try {
+            recognitionInstance.start();
+          } catch (error) {
+            console.error('Error reiniciando reconocimiento:', error);
+          }
         }
       };
 
       setRecognition(recognitionInstance);
+    }
+  };
+
+  const isQuantitativeType = (type) => type && type.startsWith('cuantitativa');
+
+  const processVoiceNumbers = (text) => {
+    const numberMap = {
+      cero: '0', uno: '1', un: '1', dos: '2', tres: '3', cuatro: '4', cinco: '5',
+      seis: '6', siete: '7', ocho: '8', nueve: '9', diez: '10', once: '11',
+      doce: '12', trece: '13', catorce: '14', quince: '15', dieciseis: '16',
+      diecisiete: '17', dieciocho: '18', diecinueve: '19', veinte: '20',
+      veintiuno: '21', veintidos: '22', veintitres: '23', veinticuatro: '24',
+      veinticinco: '25', veintiseis: '26', veintisiete: '27', veintiocho: '28',
+      veintinueve: '29', treinta: '30', cuarenta: '40', cincuenta: '50',
+      sesenta: '60', setenta: '70', ochenta: '80', noventa: '90', cien: '100',
+      ciento: '100', doscientos: '200', mil: '1000'
+    };
+
+    let processed = text
+      .toLowerCase()
+      .replace(/[,;]/g, ' ')
+      .replace(/\s+y\s+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    processed = processed.replace(/(\d+)\s+(punto|coma)\s+(\d+)/g, '$1.$3');
+
+    Object.keys(numberMap).forEach((word) => {
+      const regex = new RegExp(`\\b${word}\\b`, 'g');
+      processed = processed.replace(regex, numberMap[word]);
+    });
+
+    const matches = processed.match(/-?\d*\.?\d+/g);
+    return matches ? matches.map(Number).filter((n) => !isNaN(n)) : [];
+  };
+
+  const processVoiceWords = (text) => {
+    return text
+      .toLowerCase()
+      .replace(/[.,;!?¿¡]/g, ' ')
+      .split(/\s+/)
+      .filter((word) => word.length > 0)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+  };
+
+  const appendVoiceItems = (items) => {
+    if (!items || items.length === 0) return;
+    const text = items.join(', ');
+    setVoiceTranscript((prev) => (prev ? `${prev}, ${text}` : text));
+  };
+
+  const handleVariableTypeSelection = (transcript) => {
+    const numericKeywords = ['numero', 'numeros', 'cuantitativa', 'cantidad', 'digito', 'digitos'];
+    const wordKeywords = ['palabra', 'palabras', 'cualitativa', 'texto', 'categoria', 'categorias'];
+
+    if (numericKeywords.some((keyword) => transcript.includes(keyword))) {
+      setVariableType('cuantitativa_continua');
+      setAwaitingVariableType(false);
+      toast.success('Modo numérico activado');
+      return true;
+    }
+
+    if (wordKeywords.some((keyword) => transcript.includes(keyword))) {
+      setVariableType('cualitativa_nominal');
+      setAwaitingVariableType(false);
+      toast.success('Modo palabras activado');
+      return true;
+    }
+
+    toast.info('Decí "números" o "palabras" para continuar');
+    return false;
+  };
+
+  const handleVoiceTranscript = (transcript) => {
+    if (!transcript || transcript === lastTranscriptRef.current) return;
+    lastTranscriptRef.current = transcript;
+
+    if (
+      transcript.includes('detener') ||
+      transcript.includes('parar') ||
+      transcript.includes('listo')
+    ) {
+      if (recognition) recognition.stop();
+      setIsListening(false);
+      isListeningRef.current = false;
+      setAwaitingVariableType(false);
+      toast.info('Reconocimiento detenido');
+      return;
+    }
+
+    if (awaitingVariableType) {
+      handleVariableTypeSelection(transcript);
+      return;
+    }
+
+    if (isQuantitativeType(variableType)) {
+      const numbers = processVoiceNumbers(transcript);
+      if (numbers.length > 0) {
+        appendVoiceItems(numbers);
+        toast.success(`Números detectados: ${numbers.join(', ')}`);
+      } else {
+        toast.error('No se reconocieron números válidos');
+      }
+      return;
+    }
+
+    const words = processVoiceWords(transcript);
+    if (words.length > 0) {
+      appendVoiceItems(words);
+      toast.success(`Palabras detectadas: ${words.join(', ')}`);
+    } else {
+      toast.error('No se reconocieron palabras válidas');
     }
   };
 
@@ -501,10 +621,23 @@ const CargaDatosSecundario = () => {
     if (isListening) {
       recognition.stop();
       setIsListening(false);
+      isListeningRef.current = false;
+      setAwaitingVariableType(false);
     } else {
-      recognition.start();
-      setIsListening(true);
-      toast.info('Escuchando... Dictá tus datos separados por comas');
+      try {
+        setIsListening(true);
+        isListeningRef.current = true;
+        setAwaitingVariableType(true);
+        lastTranscriptRef.current = '';
+        recognition.start();
+        toast.info('Deci "numeros" o "palabras" para elegir el modo');
+      } catch (error) {
+        console.error('Error iniciando reconocimiento:', error);
+        setIsListening(false);
+        isListeningRef.current = false;
+        setAwaitingVariableType(false);
+        toast.error('No se pudo iniciar el reconocimiento de voz');
+      }
     }
   };
 

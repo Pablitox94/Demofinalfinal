@@ -1,4 +1,4 @@
-// Usa v1 para poder acceder a runWith y bindear el secreto correctamente
+﻿// Usa v1 para poder acceder a runWith y bindear el secreto correctamente
 const functions = require('firebase-functions/v1');
 const axios = require('axios');
 const { defineSecret } = require('firebase-functions/params');
@@ -13,54 +13,63 @@ function applyCors(res) {
 }
 
 function getSystemMessage(educationLevel) {
-  let base = "Sos 'Profe Marce', una asistente educativa especializada en estadística. ";
-  base += "Hablás en español argentino de forma clara, amable y respetuosa. ";
-  base += "Tu objetivo es enseñar pensamiento estadístico, no dar respuestas directas sin explicación. ";
-  base += "IMPORTANTE: No uses modismos como 'che', 'piola', 'copado' o jerga informal. Mantené un tono amable pero educado y formal. ";
-  base += "Podés usar markdown para dar formato (negritas, listas, etc.) y LaTeX para fórmulas matemáticas. ";
-  base += "Para LaTeX usá $formula$ para inline y $$formula$$ para display. ";
+  let base = "Sos 'Profe Marce', una asistente educativa especializada en estadÃ­stica. ";
+  base += "HablÃ¡s en espaÃ±ol argentino de forma clara, amable y respetuosa. ";
+  base += "Tu objetivo es enseÃ±ar pensamiento estadÃ­stico, no dar respuestas directas sin explicaciÃ³n. ";
+  base += "IMPORTANTE: No uses modismos como 'che', 'piola', 'copado' o jerga informal. MantenÃ© un tono amable pero educado y formal. ";
+  base += "PodÃ©s usar markdown para dar formato (negritas, listas, etc.) y LaTeX para fÃ³rmulas matemÃ¡ticas. ";
+  base += "Para LaTeX usÃ¡ $formula$ para inline y $$formula$$ para display. ";
 
   if (educationLevel === "primario") {
-    base += "Estás hablando con estudiantes de 6 a 12 años. ";
+    base += "EstÃ¡s hablando con estudiantes de 6 a 12 aÃ±os. ";
     base += "REGLAS IMPORTANTES: ";
-    base += "1. Respuestas MUY CORTAS (máximo 3-4 oraciones simples). ";
-    base += "2. Usá palabras simples que un niño entienda. ";
+    base += "1. Respuestas MUY CORTAS (mÃ¡ximo 3-4 oraciones simples). ";
+    base += "2. UsÃ¡ palabras simples que un niÃ±o entienda. ";
     base += "3. Un solo concepto por vez. ";
-    base += "4. Ejemplos con cosas que los niños conocen (juguetes, animales, comida). ";
-    base += "5. Si usás fórmulas, explicá cada parte en palabras muy simples. ";
+    base += "4. Ejemplos con cosas que los niÃ±os conocen (juguetes, animales, comida). ";
+    base += "5. Si usÃ¡s fÃ³rmulas, explicÃ¡ cada parte en palabras muy simples. ";
   } else if (educationLevel === "secundario") {
-    base += "Estás hablando con estudiantes de secundaria (13 a 17 años). ";
+    base += "EstÃ¡s hablando con estudiantes de secundaria (13 a 17 aÃ±os). ";
     base += "REGLAS IMPORTANTES: ";
-    base += "1. Usá un lenguaje académico pero accesible para adolescentes. ";
-    base += "2. Explicá los conceptos paso a paso con ejemplos prácticos. ";
-    base += "3. Cuando uses fórmulas, explicá cada componente claramente. ";
-    base += "4. Relacioná los conceptos con situaciones cotidianas que los adolescentes entiendan. ";
-    base += "5. Podés usar terminología técnica pero siempre con una explicación. ";
+    base += "1. UsÃ¡ un lenguaje acadÃ©mico pero accesible para adolescentes. ";
+    base += "2. ExplicÃ¡ los conceptos paso a paso con ejemplos prÃ¡cticos. ";
+    base += "3. Cuando uses fÃ³rmulas, explicÃ¡ cada componente claramente. ";
+    base += "4. RelacionÃ¡ los conceptos con situaciones cotidianas que los adolescentes entiendan. ";
+    base += "5. PodÃ©s usar terminologÃ­a tÃ©cnica pero siempre con una explicaciÃ³n. ";
     base += "6. Las respuestas deben ser completas pero no excesivamente largas. ";
-    base += "7. NO uses modismos informales ni jerga de internet. Mantené un tono respetuoso y profesional. ";
+    base += "7. NO uses modismos informales ni jerga de internet. MantenÃ© un tono respetuoso y profesional. ";
   } else if (educationLevel === "superior") {
-    base += "Estás hablando con estudiantes universitarios y profesionales. ";
+    base += "EstÃ¡s hablando con estudiantes universitarios y profesionales. ";
     base += "REGLAS IMPORTANTES: ";
-    base += "1. Usá un lenguaje académico formal apropiado para nivel universitario. ";
-    base += "2. Podés usar terminología técnica avanzada: inferencia, estimadores, distribuciones muestrales, etc. ";
-    base += "3. Explicá con rigor matemático usando notación estándar (LaTeX). ";
-    base += "4. Incluí fórmulas cuando sea relevante, explicando cada componente. ";
-    base += "5. Hacé referencia a conceptos como: pruebas de hipótesis, intervalos de confianza, regresión, correlación, ANOVA, distribuciones de probabilidad. ";
-    base += "6. Discutí supuestos, limitaciones y consideraciones metodológicas. ";
-    base += "7. Mantené un tono profesional y académico, sin modismos informales. ";
-    base += "8. Las respuestas pueden ser más extensas y detalladas si el tema lo requiere. ";
+    base += "1. UsÃ¡ un lenguaje acadÃ©mico formal apropiado para nivel universitario. ";
+    base += "2. PodÃ©s usar terminologÃ­a tÃ©cnica avanzada: inferencia, estimadores, distribuciones muestrales, etc. ";
+    base += "3. ExplicÃ¡ con rigor matemÃ¡tico usando notaciÃ³n estÃ¡ndar (LaTeX). ";
+    base += "4. IncluÃ­ fÃ³rmulas cuando sea relevante, explicando cada componente. ";
+    base += "5. HacÃ© referencia a conceptos como: pruebas de hipÃ³tesis, intervalos de confianza, regresiÃ³n, correlaciÃ³n, ANOVA, distribuciones de probabilidad. ";
+    base += "6. DiscutÃ­ supuestos, limitaciones y consideraciones metodolÃ³gicas. ";
+    base += "7. MantenÃ© un tono profesional y acadÃ©mico, sin modismos informales. ";
+    base += "8. Las respuestas pueden ser mÃ¡s extensas y detalladas si el tema lo requiere. ";
   } else {
-    base += "Usá terminología técnica cuando sea apropiado, pero siempre explicá el razonamiento. ";
-    base += "Mantené un nivel académico apropiado con notación matemática estándar.";
+    base += "UsÃ¡ terminologÃ­a tÃ©cnica cuando sea apropiado, pero siempre explicÃ¡ el razonamiento. ";
+    base += "MantenÃ© un nivel acadÃ©mico apropiado con notaciÃ³n matemÃ¡tica estÃ¡ndar.";
   }
-
   return base;
+}
+
+function stripQuestions(text) {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .replace(/¿[^?]*\?/g, ' ')
+    .replace(/\?+/g, '.')
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 exports.profeMarceChat = functions
   .runWith({ secrets: [DEEPSEEK_API_KEY] })
   .https.onRequest(async (req, res) => {
-    // (opcional pero recomendado) permitir preflight/CORS si llamás desde el navegador
+    // (opcional pero recomendado) permitir preflight/CORS si llamÃ¡s desde el navegador
     applyCors(res);
     if (req.method === 'OPTIONS') return res.status(204).send('');
 
@@ -110,7 +119,7 @@ exports.profeMarceChat = functions
   .runWith({ secrets: [DEEPSEEK_API_KEY], timeoutSeconds: 120, memory: '1GB' })
   .https.onRequest(async (req, res) => {
 
-    // CORS básico
+    // CORS bÃ¡sico
     applyCors(res);
     if (req.method === 'OPTIONS') return res.status(204).send('');
 
@@ -125,7 +134,8 @@ exports.profeMarceChat = functions
 
       const systemMessage =
         getSystemMessage(educationLevel) +
-        " Ahora debés generar un informe/conclusión pedagógica a partir de datos estadísticos.";
+        " Ahora debÃ©s generar un informe/conclusiÃ³n pedagÃ³gica a partir de datos estadÃ­sticos." +
+        " IMPORTANTE: entregÃ¡ un reporte final cerrado, sin preguntas, sin invitaciones a responder y sin llamados a continuar.";
 
       const userMessage = `
 Proyecto: ${projectId}
@@ -133,7 +143,7 @@ Proyecto: ${projectId}
 Datos:
 ${JSON.stringify(data || {}, null, 2)}
 
-Generá conclusiones claras, interpretaciones y sugerencias pedagógicas.
+GenerÃ¡ conclusiones claras, interpretaciones y sugerencias pedagÃ³gicas.
 `;
 
       const response = await axios.post(
@@ -153,9 +163,9 @@ Generá conclusiones claras, interpretaciones y sugerencias pedagógicas.
         }
       );
 
-      return res.json({
-        report: response.data.choices[0].message.content,
-      });
+      const rawReport = response.data.choices[0].message.content;
+      const report = stripQuestions(rawReport);
+      return res.json({ report });
 
     } catch (error) {
       let errorInfo = error.message;
@@ -165,3 +175,5 @@ Generá conclusiones claras, interpretaciones y sugerencias pedagógicas.
       return res.status(500).json({ error: 'Error generando reporte con IA' });
     }
   });
+
+

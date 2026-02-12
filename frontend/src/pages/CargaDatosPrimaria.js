@@ -19,6 +19,7 @@ const CargaDatosPrimaria = () => {
   const [manualData, setManualData] = useState('');
   const [frequencyData, setFrequencyData] = useState([{ value: '', frequency: '' }]);
   const [variableName, setVariableName] = useState('');
+  const [variableType, setVariableType] = useState('cualitativa_nominal');
   const [existingDataset, setExistingDataset] = useState(null);
   const [isListening, setIsListening] = useState(false);
   const [voiceTranscript, setVoiceTranscript] = useState('');
@@ -86,6 +87,7 @@ const CargaDatosPrimaria = () => {
     setManualData('');
     setFrequencyData([{ value: '', frequency: '' }]);
     setVariableName('');
+    setVariableType('cualitativa_nominal');
     setExistingDataset(null);
     setVoiceTranscript('');
     loadExistingData(projectId);
@@ -101,6 +103,7 @@ const CargaDatosPrimaria = () => {
         if (dataset.variables && dataset.variables.length > 0) {
           const variable = dataset.variables[0];
           setVariableName(variable.name);
+          setVariableType(variable.type || 'cualitativa_nominal');
           
           if (dataset.source === 'frequency_table') {
             const valueCounts = {};
@@ -138,6 +141,11 @@ const CargaDatosPrimaria = () => {
     setFrequencyData(updated);
   };
 
+  const variableTypes = [
+    { value: 'cualitativa_nominal', label: 'Cualitativa' },
+    { value: 'cuantitativa_continua', label: 'Cuantitativa' }
+  ];
+
   const saveManualData = async () => {
     if (!currentProjectId) {
       toast.error('Seleccioná una misión primero');
@@ -148,7 +156,10 @@ const CargaDatosPrimaria = () => {
       return;
     }
 
-    const values = manualData.trim().split(/[\s,]+/).filter(v => v.trim() !== '');
+    const rawValues = manualData.trim().split(/[\s,]+/).filter(v => v.trim() !== '');
+    const values = variableType.startsWith('cuantitativa')
+      ? rawValues.map(v => parseFloat(v)).filter(v => !isNaN(v))
+      : rawValues;
 
     if (values.length === 0) {
       toast.error('¡Ingresá al menos un dato!');
@@ -165,7 +176,7 @@ const CargaDatosPrimaria = () => {
         rawData: values.map((val, idx) => ({ index: idx + 1, valor: val })),
         variables: [{
           name: variableName || 'valor',
-          type: 'cualitativa_nominal',
+          type: variableType,
           values: values
         }],
         source: 'manual'
@@ -201,7 +212,12 @@ const CargaDatosPrimaria = () => {
       validData.forEach(row => {
         const freq = parseInt(row.frequency);
         for (let i = 0; i < freq; i++) {
-          values.push(row.value);
+          if (variableType.startsWith('cuantitativa')) {
+            const num = parseFloat(row.value);
+            if (!isNaN(num)) values.push(num);
+          } else {
+            values.push(row.value);
+          }
         }
       });
 
@@ -210,7 +226,7 @@ const CargaDatosPrimaria = () => {
         rawData: values.map((val, idx) => ({ index: idx + 1, valor: val })),
         variables: [{
           name: variableName || 'valor',
-          type: 'cualitativa_nominal',
+          type: variableType,
           values: values
         }],
         source: 'frequency_table'
@@ -235,7 +251,10 @@ const CargaDatosPrimaria = () => {
       return;
     }
 
-    const values = voiceTranscript.trim().split(/[\s,]+/).filter(v => v.trim() !== '');
+    const rawValues = voiceTranscript.trim().split(/[\s,]+/).filter(v => v.trim() !== '');
+    const values = variableType.startsWith('cuantitativa')
+      ? rawValues.map(v => parseFloat(v)).filter(v => !isNaN(v))
+      : rawValues;
 
     if (values.length === 0) {
       toast.error('¡No escuché ningún dato!');
@@ -252,7 +271,7 @@ const CargaDatosPrimaria = () => {
         rawData: values.map((val, idx) => ({ index: idx + 1, valor: val })),
         variables: [{
           name: variableName || 'valor',
-          type: 'cualitativa_nominal',
+          type: variableType,
           values: values
         }],
         source: 'voice'
@@ -343,6 +362,20 @@ const CargaDatosPrimaria = () => {
                 </div>
 
                 <div className="mb-6">
+                  <Label className="text-lg mb-2 block">Tipo de variable:</Label>
+                  <Select value={variableType} onValueChange={setVariableType}>
+                    <SelectTrigger className="text-lg h-12">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {variableTypes.map((vt) => (
+                        <SelectItem key={vt.value} value={vt.value}>{vt.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="mb-6">
                   <Label className="text-lg mb-2 block">Escribí tus datos (separados por espacios o comas):</Label>
                   <p className="text-sm text-gray-600 mb-2">
                     Ejemplo: Perro Gato Perro Conejo <strong>o</strong> Perro, Gato, Perro, Conejo
@@ -378,6 +411,20 @@ const CargaDatosPrimaria = () => {
                     onChange={(e) => setVariableName(e.target.value)}
                     className="text-lg"
                   />
+                </div>
+
+                <div className="mb-6">
+                  <Label className="text-lg mb-2 block">Tipo de variable:</Label>
+                  <Select value={variableType} onValueChange={setVariableType}>
+                    <SelectTrigger className="text-lg h-12">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {variableTypes.map((vt) => (
+                        <SelectItem key={vt.value} value={vt.value}>{vt.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="mb-4">
@@ -460,6 +507,20 @@ const CargaDatosPrimaria = () => {
                     onChange={(e) => setVariableName(e.target.value)}
                     className="text-lg"
                   />
+                </div>
+
+                <div className="mb-6">
+                  <Label className="text-lg mb-2 block">Tipo de variable:</Label>
+                  <Select value={variableType} onValueChange={setVariableType}>
+                    <SelectTrigger className="text-lg h-12">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {variableTypes.map((vt) => (
+                        <SelectItem key={vt.value} value={vt.value}>{vt.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {!recognition ? (
@@ -565,3 +626,6 @@ const CargaDatosPrimaria = () => {
 };
 
 export default CargaDatosPrimaria;
+
+
+

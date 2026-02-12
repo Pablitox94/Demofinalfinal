@@ -178,12 +178,15 @@ const AnalisisSecundario = () => {
     calculateBasicStatistics(variable);
   }, [freqTableType, numIntervals, useSturgess]);
 
-  const calculateFrequencyTable = (variable) => {
+  const calculateFrequencyTable = (variable, overrides = {}) => {
     const values = variable.values;
     const isNumeric = values.every(v => !isNaN(parseFloat(v)));
     const n = values.length;
+    const tableType = overrides.freqTableType ?? freqTableType;
+    const intervalsCount = overrides.numIntervals ?? numIntervals;
+    const sturgessEnabled = overrides.useSturgess ?? useSturgess;
 
-    if (freqTableType === 'simple' || !isNumeric) {
+    if (tableType === 'simple' || !isNumeric) {
       // Tabla simple
       const counts = {};
       values.forEach(val => {
@@ -223,8 +226,8 @@ const AnalisisSecundario = () => {
       const max = Math.max(...numericValues);
       
       // Calcular número de intervalos
-      let k = numIntervals;
-      if (useSturgess) {
+      let k = intervalsCount;
+      if (sturgessEnabled) {
         k = Math.ceil(1 + 3.322 * Math.log10(n));
       }
       
@@ -480,7 +483,7 @@ const AnalisisSecundario = () => {
                     onClick={() => {
                       setFreqTableType('simple');
                       const variable = variables.find(v => v.name === selectedVariable);
-                      if (variable) calculateFrequencyTable(variable);
+                      if (variable) calculateFrequencyTable(variable, { freqTableType: 'simple' });
                     }}
                     className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                       freqTableType === 'simple'
@@ -494,7 +497,7 @@ const AnalisisSecundario = () => {
                     onClick={() => {
                       setFreqTableType('agrupada');
                       const variable = variables.find(v => v.name === selectedVariable);
-                      if (variable) calculateFrequencyTable(variable);
+                      if (variable) calculateFrequencyTable(variable, { freqTableType: 'agrupada' });
                     }}
                     className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                       freqTableType === 'agrupada'
@@ -515,9 +518,10 @@ const AnalisisSecundario = () => {
                     type="checkbox"
                     checked={useSturgess}
                     onChange={(e) => {
-                      setUseSturgess(e.target.checked);
+                      const nextUseSturgess = e.target.checked;
+                      setUseSturgess(nextUseSturgess);
                       const variable = variables.find(v => v.name === selectedVariable);
-                      if (variable) setTimeout(() => calculateFrequencyTable(variable), 0);
+                      if (variable) calculateFrequencyTable(variable, { useSturgess: nextUseSturgess });
                     }}
                     className="w-4 h-4 rounded"
                   />
@@ -532,9 +536,10 @@ const AnalisisSecundario = () => {
                       max="20"
                       value={numIntervals}
                       onChange={(e) => {
-                        setNumIntervals(parseInt(e.target.value) || 5);
+                        const nextNumIntervals = parseInt(e.target.value, 10) || 5;
+                        setNumIntervals(nextNumIntervals);
                         const variable = variables.find(v => v.name === selectedVariable);
-                        if (variable) setTimeout(() => calculateFrequencyTable(variable), 0);
+                        if (variable) calculateFrequencyTable(variable, { numIntervals: nextNumIntervals });
                       }}
                       className="w-16 px-2 py-1 border rounded text-center"
                     />

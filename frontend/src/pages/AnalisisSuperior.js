@@ -200,12 +200,15 @@ const AnalisisSuperior = () => {
     calculateBasicStatistics(variable);
   }, [freqTableType, numIntervals, useSturgess]);
 
-  const calculateFrequencyTable = (variable) => {
+  const calculateFrequencyTable = (variable, overrides = {}) => {
     const values = variable.values;
     const isNumeric = values.every(v => !isNaN(parseFloat(v)));
     const n = values.length;
+    const tableType = overrides.freqTableType ?? freqTableType;
+    const intervalsCount = overrides.numIntervals ?? numIntervals;
+    const sturgessEnabled = overrides.useSturgess ?? useSturgess;
 
-    if (freqTableType === 'simple' || !isNumeric) {
+    if (tableType === 'simple' || !isNumeric) {
       const counts = {};
       values.forEach(val => {
         counts[val] = (counts[val] || 0) + 1;
@@ -242,8 +245,8 @@ const AnalisisSuperior = () => {
       const min = Math.min(...numericValues);
       const max = Math.max(...numericValues);
       
-      let k = numIntervals;
-      if (useSturgess) {
+      let k = intervalsCount;
+      if (sturgessEnabled) {
         k = Math.ceil(1 + 3.322 * Math.log10(n));
       }
       
@@ -816,7 +819,7 @@ const AnalisisSuperior = () => {
                         onClick={() => {
                           setFreqTableType('simple');
                           const v = variables.find(v => v.name === selectedVariable);
-                          if (v) calculateFrequencyTable(v);
+                          if (v) calculateFrequencyTable(v, { freqTableType: 'simple' });
                         }}
                         className={`px-4 py-2 rounded-lg text-sm font-medium ${
                           freqTableType === 'simple' ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-700'
@@ -828,7 +831,7 @@ const AnalisisSuperior = () => {
                         onClick={() => {
                           setFreqTableType('agrupada');
                           const v = variables.find(v => v.name === selectedVariable);
-                          if (v) calculateFrequencyTable(v);
+                          if (v) calculateFrequencyTable(v, { freqTableType: 'agrupada' });
                         }}
                         className={`px-4 py-2 rounded-lg text-sm font-medium ${
                           freqTableType === 'agrupada' ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-700'
@@ -837,6 +840,44 @@ const AnalisisSuperior = () => {
                         Agrupados
                       </button>
                     </div>
+
+                    {freqTableType === 'agrupada' && (
+                      <div className="mt-2 mb-4 flex items-center gap-4 p-3 bg-emerald-50 rounded-xl">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={useSturgess}
+                            onChange={(e) => {
+                              const nextUseSturgess = e.target.checked;
+                              setUseSturgess(nextUseSturgess);
+                              const v = variables.find((item) => item.name === selectedVariable);
+                              if (v) calculateFrequencyTable(v, { useSturgess: nextUseSturgess });
+                            }}
+                            className="w-4 h-4 rounded"
+                          />
+                          <span className="text-sm">Regla de Sturges</span>
+                        </label>
+
+                        {!useSturgess && (
+                          <div className="flex items-center gap-2">
+                            <Label className="text-sm">Intervalos:</Label>
+                            <Input
+                              type="number"
+                              min="2"
+                              max="20"
+                              value={numIntervals}
+                              onChange={(e) => {
+                                const nextNumIntervals = parseInt(e.target.value, 10) || 5;
+                                setNumIntervals(nextNumIntervals);
+                                const v = variables.find((item) => item.name === selectedVariable);
+                                if (v) calculateFrequencyTable(v, { numIntervals: nextNumIntervals });
+                              }}
+                              className="w-20 text-center"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {frequencyTable.length > 0 && (
                       <div className="border border-emerald-200 rounded-xl overflow-hidden">
